@@ -1,0 +1,27 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex-MI10/test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex-MI10/test/issues"
+  },
+  "homepage": "https://github.com/Alex-MI10/test#readme",
+  "devDependencies": {
+    "grunt": "^1.6.1",
+    "grunt-contrib-uglify": "^5.2.2",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-sass": "^3.1.0",
+    "grunt-shell": "^4.0.0",
+    "sass": "^1.77.6"
+  }
+}
