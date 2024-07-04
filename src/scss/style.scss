@@ -1,5 +1,8 @@
 $margin: 0;
 $padding: 0;
+$left: 50%;
+$transform-x: translateX(-50%);
+$positionAbs: absolute;
 
 * {
   box-sizing: border-box;
@@ -14,11 +17,36 @@ html {
 
 .hero {
   overscroll-behavior: none;
-  width: calc(100vw * 3); // Adjust this based on the number of panels
   height: 100vh;
   display: flex;
   flex-wrap: nowrap;
-  overflow: hidden; // Ensure overflow is hidden
+  overflow: hidden;
+  position: relative;
+  color: #ffffff;
+
+  &__title,
+  &__desc {
+    position: $positionAbs;
+    left: $left;
+    transform: $transform-x;
+
+    @media (max-width: 767px) {
+      width: 300px;
+    }
+  }
+
+  &__title {
+    bottom: 135px;
+    font-size: 80px;
+    @media (max-width: 767px) {
+      bottom: 170px;
+    }
+  }
+
+  &__desc {
+    bottom: 100px;
+    font-size: 14px;
+  }
 
   &__img {
     img {
@@ -29,6 +57,13 @@ html {
   }
 
   &__panel {
-    flex: 0 0 100vw; // Ensure each panel takes the full viewport width
+    flex: 0 0 100vw; // each slide take full width
+  }
+
+  &__arrow {
+    position: $positionAbs;
+    bottom: 0;
+    width: 200px;
+    background: red;
   }
 }

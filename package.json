@@ -18,10 +18,10 @@
   "homepage": "https://github.com/Alex-MI10/test#readme",
   "devDependencies": {
     "grunt": "^1.6.1",
-    "grunt-contrib-uglify": "^5.2.2",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-sass": "^3.1.0",
     "grunt-shell": "^4.0.0",
+    "grunt-terser": "^2.0.0",
     "sass": "^1.77.6"
   }
 }
