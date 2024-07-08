@@ -2,6 +2,7 @@ $margin: 0;
 $padding: 0;
 $left: 50%;
 $transform-x: translateX(-50%);
+$transform-y: translateY(-50%);
 $positionAbs: absolute;
 $positionRel: relative;
 $overflowHid: hidden;
@@ -79,9 +80,8 @@ html {
 .carousel-scroller {
   max-width: 1300px;
   padding: 0 20px;
-  margin: auto;
+  margin: 0 auto 50px auto;
   overflow: $overflowHid;
-  color: white;
 
   &__img {
     position: $positionRel;
@@ -122,11 +122,75 @@ html {
     position: $positionAbs;
     left: 60px;
     bottom: 30px;
+    color: white;
     @media (max-width: 767px) {
       font-size: 30px;
       right: 20px;
       left: 20px;
       bottom: 20px;
     }
+  }
+}
+
+.rotator {
+  position: relative;
+
+  &__indicators {
+    width: 200px;
+    top: 50%;
+    transform: $transform-y;
+    left: 20%;
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    z-index: 999;
+    @media (max-width: 767px) {
+      display: none;
+    }
+
+    &__child {
+      width: 10px;
+      height: 10px;
+      border-radius: 50px;
+      background-color: #adadad;
+      margin: 10px 0;
+      cursor: pointer;
+      @media (max-width: 767px) {
+        display: none;
+      }
+    }
+  }
+
+  &__page-counter {
+    font-size: 70px;
+    font-style: italic;
+    color: #002664;
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__point {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+
+    img {
+      width: 400px;
+      max-width: 100%;
+    }
+
+    @media (max-width: 767px) {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+    }
+  }
+
+  &__wrapper {
+    height: 100vh;
+    width: 100%;
   }
 }

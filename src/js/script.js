@@ -1,5 +1,6 @@
 "use strict";
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollToPlugin);
 
 const marketingCollection = [
   {
@@ -138,64 +139,73 @@ const carouselScroller = [
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 2",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 3",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 4",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 5",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 6",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 7",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 8",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 9",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
   {
     title: "product title 10",
     imgMobile: "./images/carousel-scroller/carousel-scroller-mobile.webp",
     img: "./images/carousel-scroller/carousel-scroller.webp",
     arrow: "./images/carousel-scroller/arrow-left.svg",
+    link: "",
   },
 ];
 
-// Function to render carousel items
 function renderCarouselItems() {
   const container = document.getElementById("nextSection");
 
@@ -204,17 +214,18 @@ function renderCarouselItems() {
     carouselItem.className = "carousel-scroller__img";
 
     carouselItem.innerHTML = `
-      <img class="carousel-scroller__img__child" src="${item.imgMobile}" alt="${item.title} Mobile" />
-      <img class="carousel-scroller__img__child" src="${item.img}" alt="${item.title}" />
-      <img class="carousel-scroller__img__arrow" src="${item.arrow}" alt="Arrow" />
-      <div class="carousel-scroller__title">${item.title}</div>
+      <a href="${item.link}">
+        <img class="carousel-scroller__img__child" src="${item.imgMobile}" alt="${item.title} Mobile" />
+        <img class="carousel-scroller__img__child" src="${item.img}" alt="${item.title}" />
+        <img class="carousel-scroller__img__arrow" src="${item.arrow}" alt="Arrow" />
+        <div class="carousel-scroller__title">${item.title}</div>
+      </a>
     `;
 
     container.appendChild(carouselItem);
   });
 }
 
-// Initialize the carousel
 renderCarouselItems();
 //carousel scroller
 
@@ -243,3 +254,79 @@ gsap.to(".hero__arrow", {
   repeat: -1,
 });
 // end gsap slide animation
+
+// rotator
+let points = gsap.utils.toArray(".rotator__point");
+let indicators = gsap.utils.toArray(".rotator__indicators__child");
+let pageCounter = document.querySelector(".rotator__page-counter__current");
+let totalPages = document.querySelector(".rotator__page-counter__total");
+
+totalPages.textContent = points.length;
+
+let height = 100 * points.length;
+
+gsap.set(".rotator__indicators", { display: "flex" });
+
+let tl = gsap.timeline({
+  duration: points.length,
+  scrollTrigger: {
+    trigger: ".rotator",
+    start: "top top",
+    end: "+=" + height + "%",
+    scrub: true,
+    id: "points",
+    onUpdate: (self) => {
+      // Calculate the current section index based on the progress
+      let currentIndex = Math.floor(self.progress * points.length);
+      pageCounter.textContent = currentIndex + 1;
+    },
+  },
+});
+
+let pinner = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".rotator .rotator__wrapper",
+    start: "top top",
+    end: "+=" + height + "%",
+    scrub: true,
+    pin: ".rotator .rotator__wrapper",
+    pinSpacing: true,
+    id: "pinning",
+  },
+});
+
+points.forEach(function (elem, i) {
+  tl.to(indicators[i], { backgroundColor: "#000000", duration: 0.25 }, i);
+  tl.from(elem.querySelector("img"), { autoAlpha: 0 }, i);
+
+  tl.addLabel("position-" + i); // Adding a label here, with the index as unique identifier
+
+  if (i != points.length - 1) {
+    tl.to(
+      indicators[i],
+      { backgroundColor: "#adadad", duration: 0.25 },
+      i + 0.75
+    );
+    tl.to(elem.querySelector("img"), { autoAlpha: 0 }, i + 0.75);
+  }
+});
+
+indicators.forEach(function (indicator, i) {
+  indicator.addEventListener("click", function () {
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: tl.scrollTrigger.labelToScroll(`position-${i}`),
+    });
+  });
+});
+
+document
+  .querySelector(".rotator__page-counter")
+  .addEventListener("click", function () {
+    let currentPage = parseInt(pageCounter.textContent, 10) - 1;
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: tl.scrollTrigger.labelToScroll(`position-${currentPage}`),
+    });
+  });
+// end rotator
